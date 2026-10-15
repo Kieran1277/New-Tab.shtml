@@ -113,7 +113,7 @@ body {
 
 
 
-document.querySelector("body > main > h3").innerHTML = 'This <a href="https://github.com/kieran1277">github</a> is very cool. All games are not sourced from there.'
+document.querySelector("body > main > h3").innerHTML = 'This <a href="https://github.com/kieran1277">Github</a> Is Very Cool. All Games Are Not Sourced From There.'
 
                     let observer = new MutationObserver((mutations) => {
 
