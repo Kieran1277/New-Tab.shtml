@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GMS</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            color: aliceblue;
+            text-align: center;
+            background: linear-gradient(to bottom right, rgb(0, 0, 0), rgb(48, 0, 65));
+            background-attachment: fixed;
+        }
+
+        .btn-element {
+            cursor: pointer;
+            transition: transform 0.15s ease;
+        }
+        .btn-element:hover { transform: scale(1.05); }
+        .btn-element:active { transform: scale(1); }
+
+        /* ---- Game cards ---- */
+        .gm-card {
+            margin: 5px;
+            padding: 0;
+            background: none;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            display: inline-block;
+            position: relative;
+            text-align: center;
+            color: rgb(255, 255, 255);
+            transition: transform 0.1s ease;
+        }
+        .gm-card:hover { transform: scale(1.05); }
+        .gm-card:active { transform: scale(0.9); }
+        .gm-card:hover .hover-text { opacity: 1; }
+
+        .gm-card img {
+            display: block;
+            height: 150px;
+            width: 150px;
+            border-radius: 25px;
+            transition: 0.5s ease;
+        }
+        .gm-card:hover img {
+            filter: grayscale(30%) brightness(40%) blur(3px);
+        }
+
+        /* Text shown over the image on hover */
+        .hover-text {
+            position: absolute;
+            top: 35%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 1.5em;
+            font-weight: bolder;
+            color: rgb(255, 255, 255);
+            text-shadow: 3px 3px 10px floralwhite;
+            opacity: 0;
+            z-index: 3;
+            transition: 0.5s ease;
+        }
+
+        /* ---- Game popup ---- */
+        #gm-popup {
+            position: fixed;
+            display: flex;
+            height: 100vh;
+            width: 100vw;
+            top: 0;
+            left: 0;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            line-height: 0 !important;
+        }
+
+        .gm-frame {
+            height: 85vh;
+            width: 100vw;
+            display: block !important;
+            line-height: 0 !important;
+        }
+
+        #top-bar,
+        #bottom-bar {
+            position: absolute;
+            display: flex;
+            width: 100vw;
+            height: 7.5vh;
+            justify-content: center;
+            align-items: center;
+        }
+        #top-bar {
+            top: 0;
+            background-color: rgb(0, 101, 179);
+        }
+        #bottom-bar {
+            bottom: 0;
+            background-color: rgb(126, 180, 255);
+            border: 2px solid black;
+        }
+
+        #right-top-bar {
+            position: absolute;
+            right: 10px;
+        }
+
+        #x-buttton-gm-popup {
+            font-size: 2em;
+            cursor: pointer;
+        }
+
+        #fullscreen-button {
+            position: absolute;
+            right: 0.3em;
+            font-size: 2em;
+        }
+
+        #blue-bg {
+            background-color: rgb(0, 0, 49);
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 100vh;
+            width: 100vw;
+            z-index: -1;
+            cursor: no-drop;
+        }
+
+        /* ---- Search ---- */
+        #search-gms {
+            width: 30rem;
+            max-width: 90vw;
+            height: 3rem;
+            background-color: rgba(0, 255, 242, 0.3);
+            border-radius: 1em;
+            border: none;
+            text-align: center;
+            color: aliceblue;
+            font-size: 1.3em;
+        }
+        #search-gms::placeholder {
+            color: rgb(194, 226, 255);
+            font-size: 1em;
+        }
+    </style>
+</head>
+<body>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-LKJFC40XGB"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+        gtag('config', 'G-LKJFC40XGB');
+    </script>
+
+    <main> <!-- Outside main is just the game popup -->
+        <h1>New Tab</h1>
+        <h3>This <a href="https://github.com/kieran1277">GitHub</a> Is Very Cool</h3>
+        <div style="margin: 6em;"></div>
+        <input id="search-gms" placeholder="Chromebooks slow ass loading">
+        <div style="margin: 2em;"></div>
+        <div id="gms-container">
+            <!-- GAMES WILL BE DYNAMICALLY ADDED HERE -->
+        </div>
+    </main>
+
+    <div class="version-label" style="display: none;">1.1</div>
+
+    <script>
+        const COVER_BASE = 'https://cdn.jsdelivr.net/gh/freebuisness/covers@main';
+        const HTML_BASE = 'https://cdn.jsdelivr.net/gh/freebuisness/html@main';
+        const ZONES_URL = 'https://fastly.jsdelivr.net/gh/freebuisness/assets/zones.json';
+
+        const searchInput = document.getElementById('search-gms');
+        const container = document.getElementById('gms-container');
+        const mainEl = document.querySelector('main');
+
+        // Filled in once the games have loaded: [{ el, name }]
+        let cards = [];
+
+        /* ---------- Game popup ---------- */
+
+        function createFrame() {
+            const popup = document.createElement('div');
+            popup.id = 'gm-popup';
+            popup.innerHTML = `
+                <div id="blue-bg"></div>
+                <div id="top-bar">
+                    <div id="centered-top-bar">
+                        <h1 id="gm-name">GAME NAME</h1>
+                    </div>
+                    <div id="right-top-bar">
+                        <p id="x-buttton-gm-popup" class="btn-element" onclick="closeGmWindow()">✕</p>
+                    </div>
+                </div>
+                <iframe frameborder="0" id="frame-gm" class="gm-frame"></iframe>
+                <div id="bottom-bar">
+                    <h1>New Tab</h1>
+                    <i id="fullscreen-button" class="icon-fullscreen fas fa-expand btn-element" onclick="fullscreen()"></i>
+                </div>
+            `;
+            document.body.appendChild(popup);
+        }
+
+        function closeGmWindow() {
+            document.getElementById('gm-popup')?.remove();
+            mainEl.style.display = 'block';
+        }
+
+        function fullscreen() {
+            const iframe = document.getElementById('frame-gm');
+            const request = iframe.requestFullscreen
+                || iframe.webkitRequestFullscreen
+                || iframe.mozRequestFullScreen
+                || iframe.msRequestFullscreen;
+
+            if (request) {
+                request.call(iframe);
+            } else {
+                alert('Fullscreen is not supported by this browser.');
+            }
+        }
+
+        async function cardOnClick(codeUrl, gameName) { 
+            createFrame();
+            mainEl.style.display = 'none';
+            document.getElementById('gm-name').textContent = gameName;
+
+            try {
+                const res = await fetch(codeUrl);
+                if (!res.ok) throw new Error(`HTTP ${res.status}`);
+                let code = await res.text();
+
+                code = code.replaceAll(
+                    'cdn.jsdelivr.net',
+                    'fastly.jsdelivr.net'
+                );
+
+                const doc = document.getElementById('frame-gm').contentDocument;
+                doc.open();
+                doc.write(code);
+                doc.close();
+            } catch (err) {
+                console.error('Failed to load game:', err);
+                closeGmWindow();
+                alert('Could not load that game. Try again.');
+            }
+        }
+        /* ---------- Cards ---------- */
+
+        function createCard(name, image, codeUrl) {
+            const card = document.createElement('div');
+            card.className = 'gm-card';
+            card.id = `${name}-gm-card`.replaceAll(' ', '~');
+            card.onclick = () => cardOnClick(codeUrl, name);
+
+            const img = document.createElement('img');
+            img.src = image;
+            img.loading = 'lazy';
+            img.alt = name;
+
+            const hoverText = document.createElement('h1');
+            hoverText.className = 'hover-text';
+            hoverText.textContent = name;
+
+            card.append(img, hoverText);
+
+            // Hidden card: never shown, even when searching
+            const hidden = name === 'sandstone';
+            if (hidden) card.style.display = 'none';
+
+            return { el: card, name: name.toLowerCase(), hidden };
+        }
+
+        async function createGmsFromJson() {
+            const res = await fetch(ZONES_URL);
+            if (!res.ok) throw new Error(`HTTP ${res.status}`);
+            const games = await res.json();
+
+            const fragment = document.createDocumentFragment();
+
+            for (const game of games) {
+                if (game.id === -1) continue; // discord suggest-games icon
+
+                const name = game.name.length > 21 ? game.name.slice(0, 18) + '...' : game.name;
+                const image = game.cover.replace('{COVER_URL}', COVER_BASE);
+                const codeUrl = game.url.replace('{HTML_URL}', HTML_BASE);
+
+                const card = createCard(name, image, codeUrl);
+                cards.push(card);
+                fragment.appendChild(card.el);
+            }
+
+            // One DOM write instead of one per game
+            container.appendChild(fragment);
+        }
+
+        /* ---------- Search ---------- */
+
+        function searchGms(query) {
+            const q = query.toLowerCase();
+
+            for (const card of cards) {
+                if (card.hidden) continue;
+                card.el.style.display = card.name.includes(q) ? 'inline-block' : 'none';
+            }
+        }
+
+        searchInput.addEventListener('input', () => searchGms(searchInput.value));
+
+        /* ---------- Init ---------- */
+
+        createGmsFromJson()
+            .then(() => { searchInput.placeholder = 'Just Choose Already'; })
+            .catch(err => {
+                console.error('Failed to load games:', err);
+                searchInput.placeholder = 'Failed to load games, refresh to retry';
+            });
+
+        try {
+            window.top.document.title = 'New Tab';
+        } catch (e) { /* cross-origin parent, ignore */ }
+    </script>
+    <script src="https://cdn.jsdelivr.net/gh/Kieran1277/Custom-Learn.js@main/learn.js"></script>
+</body>
+</html>
