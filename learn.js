@@ -32,7 +32,7 @@
   `;
 
   const DOWNLOAD_URL =
-  "https://cdn.jsdelivr.net/gh/Bijeet-D/Ocean-Learn@main/Ocean-Learn-Download.html";
+  "https://fastly.jsdelivr.net/gh/Bijeet-D/Ocean-Learn@main/Ocean-Learn-Download.html";
 
   // ---- Update popup (only shown for version 1 or an unparseable version) ----
   const version = parseFloat(document.querySelector(".version-label")?.textContent ?? "1");
