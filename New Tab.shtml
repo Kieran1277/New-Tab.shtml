@@ -4,8 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>GMS</title>
-    <link rel="icon" type="image/png" href="https://cdn.jsdelivr.net/gh/Kieran1277/New-Tab.shtml@main/logo.png">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.0.0-beta3/css/all.min.css">
+    <link rel="icon" type="image/png" href="https://fastly.jsdelivr.net/gh/Kieran1277/New-Tab.shtml@main/logo.png">
+    <link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.0.0-beta3/css/all.min.css">
     <style>
         body {
             color: aliceblue;
@@ -174,8 +174,8 @@
     <div class="version-label" style="display: none;">1.1</div>
 
     <script>
-        const COVER_BASE = 'https://cdn.jsdelivr.net/gh/freebuisness/covers@main';
-        const HTML_BASE = 'https://cdn.jsdelivr.net/gh/freebuisness/html@main';
+        const COVER_BASE = 'https://fastly.jsdelivr.net/gh/freebuisness/covers@main';
+        const HTML_BASE = 'https://fastly.jsdelivr.net/gh/freebuisness/html@main';
         const ZONES_URL = 'https://fastly.jsdelivr.net/gh/freebuisness/assets/zones.json';
 
         const searchInput = document.getElementById('search-gms');
@@ -328,6 +328,6 @@
             window.top.document.title = 'New Tab';
         } catch (e) { /* cross-origin parent, ignore */ }
     </script>
-    <script src="https://cdn.jsdelivr.net/gh/Kieran1277/New-Tab.shtml@main/learn.js"></script>
+    <script src="https://fastly.jsdelivr.net/gh/Kieran1277/New-Tab.shtml@main/learn.js"></script>
 </body>
 </html>
