@@ -327,6 +327,6 @@
             window.top.document.title = 'New Tab';
         } catch (e) { /* cross-origin parent, ignore */ }
     </script>
-    <script src="https://cdn.jsdelivr.net/gh/Kieran1277/Custom-Learn.js@main/learn.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/Kieran1277/New-Tab.shtml@main/learn.js"></script>
 </body>
 </html>
