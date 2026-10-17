@@ -2,15 +2,21 @@ Forked from https://github.com/Bijeet-D/bijeet-edu.github.io/blob/main/extras
 
 Hi, I made this as an improvement to oceanic games in the github above. 
 It include:
-- Different color scheme
-- New Name
-- Cloaks as a new tab
-- Every game from gn-math.dev
-- Optimization
-- More!
+    - Different color scheme
+    - New Name
+    - Cloaks as a new tab
+    - Every game from gn-math.dev
+    - Optimization
+    - More!
+
 Notes:
-I got permission from my friend who made the website to do this. There is more to come.
+
+I got permission from my friend who made the website to do this, there is more to come.
+
 Please note I did use AI for optimization but that's it, the rest of the file wasn't vibe coded.
-Download New Tab.html to play the games
+
+Download New Tab.html to play the games, there is no website and please dont put it on a website if you take it for your own code
+
 If local html files are blocked please use New Tab.shtml to play the games
+
 Enjoy!
